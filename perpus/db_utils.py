@@ -17,7 +17,8 @@ def get_all_buku():
 def get_buku_by_id(buku_id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM perpus_buku WHERE id = %s", [buku_id])
-        return dictfetchall(cursor)[0] if cursor.rowcount > 0 else None
+        data = dictfetchall(cursor)
+        return data[0] if data else None
 
 
 def create_buku(data):
@@ -71,7 +72,8 @@ def get_all_siswa_aktif():
 def get_siswa_by_id(siswa_id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM perpus_siswa WHERE id = %s", [siswa_id])
-        return dictfetchall(cursor)[0] if cursor.rowcount > 0 else None
+        data = dictfetchall(cursor)
+        return data[0] if data else None
 
 
 def create_siswa(data):
@@ -137,7 +139,8 @@ def get_peminjaman_by_id(peminjaman_id):
             JOIN perpus_buku b ON p.buku_id = b.id
             WHERE p.id = %s
         """, [peminjaman_id])
-        return dictfetchall(cursor)[0] if cursor.rowcount > 0 else None
+        data = dictfetchall(cursor)
+        return data[0] if data else None
 
 
 def create_peminjaman(data):
