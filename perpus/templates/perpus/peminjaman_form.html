@@ -1,0 +1,59 @@
+{% extends 'perpus/base.html' %}
+
+{% block title %}Pinjam Buku - SIPUSTAKA{% endblock %}
+
+{% block content %}
+<div class="flex items-center gap-3 mb-6">
+    <a href="{% url 'peminjaman_list' %}" class="text-slate-500 hover:text-slate-700 transition">
+        <span class="material-icons-outlined">arrow_back</span>
+    </a>
+    <div>
+        <p class="text-slate-500">Lakukan transaksi peminjaman.</p>
+        <h3 class="text-2xl font-semibold text-slate-900">Pinjam Buku</h3>
+    </div>
+</div>
+
+<div class="rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/60 border border-slate-200 max-w-4xl">
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block">
+                <span class="text-sm font-medium text-slate-700">Nama Peminjam</span>
+                <select name="siswa_id" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-500" required>
+                    <option value="">Pilih Peminjam</option>
+                    {% for siswa in siswa_list %}
+                    <option value="{{ siswa.id }}">{{ siswa.nama }} - {{ siswa.kelas }} ({{ siswa.nis }})</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="block">
+                <span class="text-sm font-medium text-slate-700">Pilih Buku</span>
+                <select name="buku_id" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-500" required>
+                    <option value="">Pilih Buku</option>
+                    {% for buku in buku_list %}
+                    <option value="{{ buku.id }}">{{ buku.judul }} (Stok: {{ buku.stok }})</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block">
+                <span class="text-sm font-medium text-slate-700">Tanggal Pinjam</span>
+                <input type="date" name="tanggal_pinjam" value="{% now 'Y-m-d' %}" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-500" required>
+            </label>
+            <label class="block">
+                <span class="text-sm font-medium text-slate-700">Tanggal Jatuh Tempo</span>
+                <input type="date" name="jatuh_tempo" value="{% now 'Y-m-d' %}" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-500" required>
+            </label>
+        </div>
+        <label class="block">
+            <span class="text-sm font-medium text-slate-700">Keperluan</span>
+            <textarea name="keperluan" rows="3" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-500" placeholder="Contoh: Tugas Bahasa Indonesia, Bacaan pribadi, dll."></textarea>
+        </label>
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+            <a href="{% url 'peminjaman_list' %}" class="rounded-2xl border border-slate-300 px-5 py-3 text-slate-700 hover:bg-slate-100 transition">Batal</a>
+            <button type="submit" class="rounded-2xl bg-brand-600 px-5 py-3 text-white hover:bg-brand-700 transition">Pinjam Buku</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'perpus/base.html' %}
+
+{% block title %}Daftar User - SIPUSTAKA{% endblock %}
+
+{% block content %}
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+    <div>
+        <p class="text-slate-500">Data siswa yang bisa meminjam buku.</p>
+        <h3 class="text-2xl font-semibold text-slate-900">Daftar User</h3>
+    </div>
+    <a href="{% url 'user_create' %}" class="inline-flex items-center gap-2 rounded-2xl bg-brand-600 text-white px-5 py-3 shadow-lg hover:bg-brand-700 transition">
+        <span class="material-icons-outlined">person_add</span>
+        Tambah User
+    </a>
+</div>
+
+<div class="rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/60 border border-slate-200 overflow-x-auto">
+    <table class="min-w-full text-left text-sm">
+        <thead class="border-b border-slate-200 text-slate-500">
+            <tr>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Nama</th>
+                <th class="py-3 px-4">Kelas</th>
+                <th class="py-3 px-4">NIS</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+            {% for siswa in siswa_list %}
+            <tr class="hover:bg-slate-50 transition">
+                <td class="py-4 px-4 font-medium text-slate-800">{{ siswa.id }}</td>
+                <td class="py-4 px-4 text-slate-700">{{ siswa.nama }}</td>
+                <td class="py-4 px-4 text-slate-700">{{ siswa.kelas }}</td>
+                <td class="py-4 px-4 text-slate-700">{{ siswa.nis }}</td>
+                <td class="py-4 px-4">
+                    {% if siswa.is_active %}
+                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-700">Aktif</span>
+                    {% else %}
+                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-slate-200 text-slate-700">Nonaktif</span>
+                    {% endif %}
+                </td>
+                <td class="py-4 px-4">
+                    <div class="flex gap-2">
+                        <a href="{% url 'user_detail' siswa.id %}" class="text-brand-600 hover:text-brand-800" title="Detail">
+                            <span class="material-icons-outlined text-sm">visibility</span>
+                        </a>
+                        <a href="{% url 'user_edit' siswa.id %}" class="text-amber-600 hover:text-amber-800" title="Edit">
+                            <span class="material-icons-outlined text-sm">edit</span>
+                        </a>
+                        <a href="{% url 'user_delete' siswa.id %}" class="text-rose-600 hover:text-rose-800" title="Hapus">
+                            <span class="material-icons-outlined text-sm">delete</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="py-5 text-center text-slate-500">Belum ada data user.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

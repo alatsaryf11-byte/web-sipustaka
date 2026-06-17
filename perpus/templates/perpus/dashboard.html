@@ -1,0 +1,172 @@
+{% extends 'perpus/base.html' %}
+
+{% block title %}Dashboard - SIPUSTAKA{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <p class="text-slate-500">Selamat datang di sistem perpustakaan digital.</p>
+        <h3 class="text-2xl font-semibold text-slate-900">Dashboard</h3>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <!-- Card 1: Total Buku -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-slate-500 text-sm">Total Buku</p>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ stats.total_buku|default:"0" }}</p>
+                </div>
+                <div class="w-10 h-10 bg-brand-100 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons-outlined text-brand-600">inventory</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3">Keseluruhan unit buku</p>
+        </div>
+
+        <!-- Card 2: Total Siswa -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-slate-500 text-sm">Total Siswa</p>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ stats.total_siswa|default:"0" }}</p>
+                </div>
+                <div class="w-10 h-10 bg-purple-100 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons-outlined text-purple-600">group</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3">Siswa terdaftar aktif</p>
+        </div>
+
+        <!-- Card 3: Sedang Dipinjam -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-slate-500 text-sm">Sedang Dipinjam</p>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ stats.sedang_dipinjam|default:"0" }}</p>
+                </div>
+                <div class="w-10 h-10 bg-amber-100 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons-outlined text-amber-600">sync</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3">Transaksi peminjaman aktif</p>
+        </div>
+
+        <!-- Card 4: Sudah Dikembalikan -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-slate-500 text-sm">Sudah Dikembalikan</p>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ stats.sudah_dikembalikan|default:"0" }}</p>
+                </div>
+                <div class="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons-outlined text-emerald-600">check_circle</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3">Transaksi yang sudah selesai</p>
+        </div>
+
+        <!-- Card 5: Terlambat -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-slate-500 text-sm">Terlambat</p>
+                    <p class="text-3xl font-bold text-slate-800 mt-1">{{ stats.terlambat|default:"0" }}</p>
+                </div>
+                <div class="w-10 h-10 bg-rose-100 rounded-2xl flex items-center justify-center">
+                    <span class="material-icons-outlined text-rose-600">warning</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3">Melewati jatuh tempo</p>
+        </div>
+    </div>
+
+    <!-- Analisis Dashboard -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mt-6">
+
+    <!-- Analisis Stok Buku -->
+    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100">
+        <div class="flex items-center gap-2 mb-5">
+            <span class="material-icons-outlined text-brand-600">analytics</span>
+            <h3 class="text-lg font-bold text-slate-800">Analisis Stok Buku</h3>
+        </div>
+
+        {% if stok_buku %}
+            {% for item in stok_buku %}
+            <div class="flex justify-between text-sm mb-2">
+                <span class="text-slate-600">{{ item.judul }}</span>
+                <span class="font-semibold text-slate-800">{{ item.stok }}</span>
+            </div>
+
+            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-4">
+                <div
+                    class="bg-brand-500 h-2.5 rounded-full"
+                    style="width: {{ item.stok }}%;">
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-slate-500 text-sm">
+                Tidak ada data stok buku.
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- Status Peminjaman -->
+    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100">
+        <div class="flex items-center gap-2 mb-5">
+            <span class="material-icons-outlined text-amber-600">menu_book</span>
+            <h3 class="text-lg font-bold text-slate-800">Status Peminjaman</h3>
+        </div>
+
+        <!-- Sedang Dipinjam -->
+        <div class="flex justify-between text-sm mb-2">
+            <span class="text-slate-600">Sedang Dipinjam</span>
+            <span class="font-semibold text-slate-800">
+                {{ status_map.Dipinjam|default:"0" }}
+            </span>
+        </div>
+
+        <div class="w-full bg-slate-200 rounded-full h-3 mb-5">
+            <div
+                class="bg-amber-500 h-3 rounded-full"
+                style="width: {{ status_map.Dipinjam|default:'0' }}%;">
+            </div>
+        </div>
+
+        <!-- Sudah Dikembalikan -->
+        <div class="flex justify-between text-sm mb-2">
+            <span class="text-slate-600">Sudah Dikembalikan</span>
+            <span class="font-semibold text-slate-800">
+                {{ status_map.Dikembalikan|default:"0" }}
+            </span>
+        </div>
+
+        <div class="w-full bg-slate-200 rounded-full h-3 mb-5">
+            <div
+                class="bg-emerald-500 h-3 rounded-full"
+                style="width: {{ status_map.Dikembalikan|default:'0' }}%;">
+            </div>
+        </div>
+
+        <!-- Terlambat -->
+        <div class="flex justify-between text-sm mb-2">
+            <span class="text-slate-600">Terlambat</span>
+            <span class="font-semibold text-slate-800">
+                {{ stats.terlambat|default:"0" }}
+            </span>
+        </div>
+
+        <div class="w-full bg-slate-200 rounded-full h-3">
+            <div
+                class="bg-rose-500 h-3 rounded-full"
+                style="width: {{ stats.terlambat|default:'0' }}%;">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+{% endblock %}  

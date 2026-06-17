@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SIPUSTAKA{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff", 100: "#dbeafe", 200: "#bfdbfe",
+                            300: "#93c5fd", 400: "#60a5fa", 500: "#3b82f6",
+                            600: "#2563eb", 700: "#1d4ed8", 800: "#1e40af", 900: "#1e3a8a",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 h-screen overflow-hidden">
+    <div class="h-screen flex flex-col md:flex-row">
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-72 h-screen bg-slate-950 text-slate-100 flex-none flex flex-col">
+            <div class="px-6 py-7 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-500 to-sky-400 flex items-center justify-center">
+                        <span class="text-xl font-bold">P</span>
+                    </div>
+                    <div>
+                        <p class="text-sm uppercase text-slate-400 tracking-[0.25em]">SIPUSTAKA</p>
+                        <h1 class="text-xl font-semibold">Sistem Perpustakaan</h1>
+                    </div>
+                </div>
+            </div>
+            <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+                <a href="{% url 'dashboard' %}" class="w-full text-left rounded-2xl px-4 py-3 flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-900 transition">
+                    <span class="material-icons-outlined">dashboard</span> Dashboard
+                </a>
+                <a href="{% url 'buku_list' %}" class="w-full text-left rounded-2xl px-4 py-3 flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-900 transition">
+                    <span class="material-icons-outlined">menu_book</span> Buku
+                </a>
+                <a href="{% url 'peminjaman_list' %}" class="w-full text-left rounded-2xl px-4 py-3 flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-900 transition">
+                    <span class="material-icons-outlined">swap_horiz</span> Peminjaman
+                </a>
+                <a href="{% url 'user_list' %}" class="w-full text-left rounded-2xl px-4 py-3 flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-900 transition">
+                    <span class="material-icons-outlined">group</span> User
+                </a>
+            </nav>
+            <div class="mt-auto px-6 pb-6">
+                <div class="rounded-3xl bg-slate-900 p-5">
+                    <p class="text-sm text-slate-400">Admin Aktif</p>
+                    <p class="mt-2 font-semibold text-white">FUDHAIL.A</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-8">
+            <!-- Messages Framework -->
+            {% if messages %}
+            <div class="mb-6 space-y-3">
+                {% for message in messages %}
+                <div class="rounded-2xl px-5 py-4 flex items-center gap-3 text-sm shadow-lg
+                    {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+                    {% elif message.tags == 'error' %}bg-rose-50 text-rose-800 border border-rose-200
+                    {% elif message.tags == 'warning' %}bg-amber-50 text-amber-800 border border-amber-200
+                    {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+                    <span class="material-icons-outlined text-xl">
+                        {% if message.tags == 'success' %}check_circle
+                        {% elif message.tags == 'error' %}error
+                        {% elif message.tags == 'warning' %}warning
+                        {% else %}info{% endif %}
+                    </span>
+                    <span class="flex-1">{{ message }}</span>
+                    <button onclick="this.parentElement.remove()" class="ml-auto text-slate-400 hover:text-slate-600">
+                        <span class="material-icons-outlined text-sm">close</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
