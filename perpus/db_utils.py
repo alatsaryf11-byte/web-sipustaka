@@ -143,7 +143,7 @@ def get_peminjaman_by_id(peminjaman_id):
 def create_peminjaman(data):
     with connection.cursor() as cursor:
         # Cek stok sebelum insert (dengan row lock untuk keamanan)
-        cursor.execute("SELECT stok FROM perpus_buku WHERE id = %s FOR UPDATE", [data['buku_id']])
+        cursor.execute("SELECT stok FROM perpus_buku WHERE id = %s", [data['buku_id']])
         stok = cursor.fetchone()[0]
         
         if stok <= 0:
